@@ -1,3 +1,7 @@
+using System;
+using System.Buffers;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GameOfLife;
@@ -7,6 +11,7 @@ public class Board
 	public int width;
 	public int height;
 	public bool[,] grid;
+	public event EventHandler? cellChanged;
 
 	public Board(int width = 25, int height = 12)
 	{
@@ -15,9 +20,10 @@ public class Board
 		grid = new bool[width, height];
 	}
 
-	public bool[,] NextState()
+	public void StepNext()
 	{
-		bool[,] grid = new bool[width, height];
+		Stack<int[]> stack = new Stack<int[]>();
+		ArrayPool<int> shared = ArrayPool<int>.Shared;
 		for (int x = 0; x < grid.GetLength(0); x++)
 		{
 			for (int y = 0; y < grid.GetLength(1); y++)
@@ -27,23 +33,47 @@ public class Board
 				{
 					// Too few living neighbors
 					if (neighbors < 2)
-						grid[x, y] = false;
+					{
+						int[] arr = shared.Rent(3);
+						(arr[0], arr[1], arr[2]) = (x, y, 0);
+						stack.Push(arr);
+					}
 					// Too many living neighbors
 					else if (neighbors > 3)
-						grid[x, y] = false;
+					{
+						int[] arr = shared.Rent(3);
+						(arr[0], arr[1], arr[2]) = (x, y, 0);
+						stack.Push(arr);
+					}
 					// Just enough living neighbors
 					else
-						grid[x, y] = true;
+					{
+						int[] arr = shared.Rent(3);
+						(arr[0], arr[1], arr[2]) = (x, y, 1);
+						stack.Push(arr);
+					}
 				}
 				else
 				{
 					// Just enough living neighbors
 					if (neighbors == 3)
-						grid[x, y] = true;
+					{
+						int[] arr = shared.Rent(3);
+						(arr[0], arr[1], arr[2]) = (x, y, 1);
+						stack.Push(arr);
+					}
 				}
 			}
 		}
-		return grid;
+
+		while (stack.Count != 0)
+		{
+			int[] data = stack.Pop();
+			CellChanged cc = new CellChanged(data);
+			grid[cc.x, cc.y] = cc.state;
+			cellChanged.Invoke(this, cc);
+			shared.Return(data);
+		}
 	}
 
 	public bool InBounds(int x, int y)
@@ -74,7 +104,7 @@ public class Board
 		set { grid[a, b] = value; }
 	}
 
-	public override String ToString()
+	public override string ToString()
 	{
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < height; y++)
