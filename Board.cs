@@ -71,7 +71,7 @@ public class Board
 			int[] data = stack.Pop();
 			CellChanged cc = new CellChanged(data);
 			grid[cc.x, cc.y] = cc.state;
-			cellChanged.Invoke(this, cc);
+			cellChanged?.Invoke(this, cc);
 			shared.Return(data);
 		}
 	}

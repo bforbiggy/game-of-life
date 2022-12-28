@@ -15,6 +15,7 @@ class Game
 	static Board board = null!;
 
 	static int WHITE = 255 << 16 | 255 << 8 | 255 << 0;
+	static byte[] BLACK = { 0, 0, 0, 0 };
 
 
 	[STAThread]
@@ -31,14 +32,32 @@ class Game
 		bmp = new WriteableBitmap(board.width, board.height, 96, 96, PixelFormats.Bgr32, null);
 		img.Source = bmp;
 		img.Stretch = Stretch.None;
-		img.HorizontalAlignment = HorizontalAlignment.Left;
-		img.VerticalAlignment = VerticalAlignment.Top;
 		img.MouseMove += new MouseEventHandler(MouseMove);
 		img.MouseLeftButtonDown += new MouseButtonEventHandler(MouseLeftButtonDown);
 		img.MouseRightButtonDown += new MouseButtonEventHandler(MouseRightButtonDown);
 
 		Application app = new Application();
+		app.Startup += (a, b) =>
+		{
+			Console.WriteLine("load completed.");
+			board[5, 5] = true;
+			board[5, 6] = true;
+			board[5, 7] = true;
+			board.StepNext();
+			Update(board);
+		};
 		app.Run();
+	}
+
+	static void Update(Board board)
+	{
+		for (int x = 0; x < board.width; x++)
+		{
+			for (int y = 0; y < board.height; y++)
+			{
+				DrawPixel(x, y, board[x, y] ? WHITE : 0);
+			}
+		}
 	}
 
 	// Draws a pixel at the target location
@@ -78,7 +97,6 @@ class Game
 
 	static void ErasePixel(int x, int y)
 	{
-		byte[] BLACK = { 0, 0, 0, 0 };
 		Int32Rect rect = new Int32Rect(x, y, 1, 1);
 		bmp.WritePixels(rect, BLACK, 4, 0);
 	}
