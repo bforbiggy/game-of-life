@@ -21,25 +21,27 @@ class Game
 	[STAThread]
 	static void Main(string[] args)
 	{
-		img = new Image();
+		// Create window and board
 		window = new Window();
-		window.Content = img;
 		window.Show();
 		board = new Board((int)window.ActualWidth, (int)window.ActualHeight);
+		bmp = new WriteableBitmap(board.width, board.height, 96, 96, PixelFormats.Bgr32, null);
 
+		// Create image render from bitmap
+		img = new Image();
 		RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
 		RenderOptions.SetEdgeMode(img, EdgeMode.Aliased);
-		bmp = new WriteableBitmap(board.width, board.height, 96, 96, PixelFormats.Bgr32, null);
 		img.Source = bmp;
 		img.Stretch = Stretch.None;
 		img.MouseMove += new MouseEventHandler(MouseMove);
 		img.MouseLeftButtonDown += new MouseButtonEventHandler(MouseLeftButtonDown);
 		img.MouseRightButtonDown += new MouseButtonEventHandler(MouseRightButtonDown);
+		window.Content = img;
 
+		// Run application
 		Application app = new Application();
 		app.Startup += (a, b) =>
 		{
-			Console.WriteLine("load completed.");
 			board[5, 5] = true;
 			board[5, 6] = true;
 			board[5, 7] = true;
