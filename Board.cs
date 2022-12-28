@@ -22,10 +22,24 @@ public class Board
 		{
 			for (int y = 0; y < grid.GetLength(1); y++)
 			{
+				int neighbors = GetNeighbors(x, y);
 				if (this.grid[x, y])
 				{
-					if (GetNeighbors(x, y) < 2)
+					// Too few living neighbors
+					if (neighbors < 2)
 						grid[x, y] = false;
+					// Too many living neighbors
+					else if (neighbors > 3)
+						grid[x, y] = false;
+					// Just enough living neighbors
+					else
+						grid[x, y] = true;
+				}
+				else
+				{
+					// Just enough living neighbors
+					if (neighbors == 3)
+						grid[x, y] = true;
 				}
 			}
 		}
