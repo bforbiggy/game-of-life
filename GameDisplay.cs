@@ -7,7 +7,7 @@ using System.Windows.Input;
 using GameOfLife;
 
 namespace WriteableBitmapDemo;
-class Game
+class GameDisplay
 {
 	static Window window = null!;
 	static Image img = null!;
