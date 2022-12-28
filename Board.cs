@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace GameOfLife;
@@ -102,6 +103,18 @@ public class Board
 	{
 		get { return grid[a, b]; }
 		set { grid[a, b] = value; }
+	}
+
+	public void Load(string path)
+	{
+		foreach (string line in File.ReadLines(path))
+		{
+			string[] tokens = line.Split(",");
+			int x = Int32.Parse(tokens[0]);
+			int y = Int32.Parse(tokens[1]);
+			if (InBounds(x, y))
+				grid[x, y] = true;
+		}
 	}
 
 	public override string ToString()
