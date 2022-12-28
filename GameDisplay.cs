@@ -49,14 +49,6 @@ class GameDisplay
 		}
 	}
 
-	// Draws a pixel at the target location
-	public void DrawPixel(MouseEventArgs e, byte[] color)
-	{
-		int x = (int)e.GetPosition(img).X;
-		int y = (int)e.GetPosition(img).Y;
-		DrawPixel(x, y, color);
-	}
-
 	public void DrawPixel(int x, int y, byte[] color)
 	{
 		Int32Rect rect = new Int32Rect(x, y, 1, 1);

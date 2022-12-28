@@ -13,20 +13,26 @@ public class Program
 
 	public static void MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 	{
-		gd.DrawPixel(e, GameDisplay.WHITE);
+		int x = (int)(e.GetPosition(img).X);
+		int y = (int)(e.GetPosition(img).Y);
+		gd.DrawPixel(x, y, GameDisplay.WHITE);
 	}
 
 	public static void MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 	{
-		gd.ErasePixel((int)(e.GetPosition(img).X), (int)(e.GetPosition(img).Y));
+		int x = (int)(e.GetPosition(img).X);
+		int y = (int)(e.GetPosition(img).Y);
+		gd.ErasePixel(x, y);
 	}
 
 	public static void MouseMove(object sender, MouseEventArgs e)
 	{
+		int x = (int)(e.GetPosition(img).X);
+		int y = (int)(e.GetPosition(img).Y);
 		if (e.LeftButton == MouseButtonState.Pressed)
-			gd.DrawPixel(e, GameDisplay.WHITE);
+			gd.DrawPixel(x, y, GameDisplay.WHITE);
 		else if (e.RightButton == MouseButtonState.Pressed)
-			gd.ErasePixel((int)(e.GetPosition(gd.img).X), (int)(e.GetPosition(img).Y));
+			gd.ErasePixel(x, y);
 	}
 
 	[STAThread]
