@@ -71,7 +71,7 @@ class GameDisplay
 
 	public void MouseWheel(object sender, MouseWheelEventArgs e)
 	{
-		System.Windows.Media.Matrix m = img.RenderTransform.Value;
+		Matrix m = img.RenderTransform.Value;
 
 		if (e.Delta > 0)
 		{
