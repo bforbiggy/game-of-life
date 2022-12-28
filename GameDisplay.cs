@@ -34,7 +34,7 @@ class GameDisplay
 		RenderOptions.SetEdgeMode(img, EdgeMode.Aliased);
 		img.Source = bmp;
 		img.Stretch = Stretch.None;
-
+		img.MouseWheel += MouseWheel;
 		window.Content = img;
 	}
 
@@ -69,27 +69,19 @@ class GameDisplay
 		bmp.WritePixels(rect, BLACK, 4, 0);
 	}
 
-	// static void w_MouseWheel(object sender, MouseWheelEventArgs e)
-	// {
-	// 	System.Windows.Media.Matrix m = i.RenderTransform.Value;
+	public void MouseWheel(object sender, MouseWheelEventArgs e)
+	{
+		System.Windows.Media.Matrix m = img.RenderTransform.Value;
 
-	// 	if (e.Delta > 0)
-	// 	{
-	// 		m.ScaleAt(
-	// 				1.5,
-	// 				1.5,
-	// 				e.GetPosition(w).X,
-	// 				e.GetPosition(w).Y);
-	// 	}
-	// 	else
-	// 	{
-	// 		m.ScaleAt(
-	// 				1.0 / 1.5,
-	// 				1.0 / 1.5,
-	// 				e.GetPosition(w).X,
-	// 				e.GetPosition(w).Y);
-	// 	}
+		if (e.Delta > 0)
+		{
+			m.ScaleAt(1.5, 1.5, e.GetPosition(window).X, e.GetPosition(window).Y);
+		}
+		else
+		{
+			m.ScaleAt(1.0 / 1.5, 1.0 / 1.5, e.GetPosition(window).X, e.GetPosition(window).Y);
+		}
 
-	// 	i.RenderTransform = new MatrixTransform(m);
-	// }
+		img.RenderTransform = new MatrixTransform(m);
+	}
 }
