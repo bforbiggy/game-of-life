@@ -70,7 +70,7 @@ public class Board
 		while (stack.Count != 0)
 		{
 			int[] data = stack.Pop();
-			CellChanged cc = new CellChanged(data);
+			CellChangArgs cc = new CellChangArgs(data);
 			grid[cc.x, cc.y] = cc.state;
 			cellChanged?.Invoke(this, cc);
 			shared.Return(data);

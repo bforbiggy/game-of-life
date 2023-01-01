@@ -13,26 +13,28 @@ public class Program
 
 	public static void MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 	{
-		int x = (int)(e.GetPosition(img).X);
-		int y = (int)(e.GetPosition(img).Y);
-		gd.DrawPixel(x, y, GameDisplay.WHITE);
+		int[] pos = { (int)(e.GetPosition(img).X), (int)(e.GetPosition(img).Y) };
+		gd.DrawPixel(pos[0], pos[1], GameDisplay.WHITE);
 	}
 
 	public static void MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 	{
-		int x = (int)(e.GetPosition(img).X);
-		int y = (int)(e.GetPosition(img).Y);
-		gd.ErasePixel(x, y);
+		int[] pos = { (int)(e.GetPosition(img).X), (int)(e.GetPosition(img).Y) };
+		gd.ErasePixel(pos[0], pos[1]);
 	}
 
 	public static void MouseMove(object sender, MouseEventArgs e)
 	{
-		int x = (int)(e.GetPosition(img).X);
-		int y = (int)(e.GetPosition(img).Y);
+		int[] pos = { (int)(e.GetPosition(img).X), (int)(e.GetPosition(img).Y) };
 		if (e.LeftButton == MouseButtonState.Pressed)
-			gd.DrawPixel(x, y, GameDisplay.WHITE);
+			gd.DrawPixel(pos[0], pos[1], GameDisplay.WHITE);
 		else if (e.RightButton == MouseButtonState.Pressed)
-			gd.ErasePixel(x, y);
+			gd.ErasePixel(pos[0], pos[1]);
+	}
+
+	public static void CellChanged(object? sender, EventArgs e)
+	{
+		CellChangArgs args = (CellChangArgs)e;
 	}
 
 	[STAThread]
@@ -47,6 +49,7 @@ public class Program
 		img.MouseMove += MouseMove;
 		img.MouseLeftButtonDown += MouseLeftButtonDown;
 		img.MouseRightButtonDown += MouseRightButtonDown;
+		board.cellChanged += CellChanged;
 
 		// Run program
 		Application app = new Application();

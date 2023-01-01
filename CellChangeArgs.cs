@@ -1,12 +1,12 @@
 using System;
 
-public class CellChanged : EventArgs
+public class CellChangArgs : EventArgs
 {
 	public int x;
 	public int y;
 	public bool state;
 
-	public CellChanged(int[] data) : base()
+	public CellChangArgs(int[] data) : base()
 	{
 		x = data[0];
 		y = data[1];
