@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -13,6 +14,7 @@ public class Board
 	public int height;
 	public bool[,] grid;
 	public event EventHandler? cellChanged;
+	private static ArrayPool<int> shared = ArrayPool<int>.Shared;
 
 	public Board(int width = 25, int height = 12)
 	{
@@ -24,7 +26,6 @@ public class Board
 	public void StepNext()
 	{
 		Stack<int[]> stack = new Stack<int[]>();
-		ArrayPool<int> shared = ArrayPool<int>.Shared;
 		for (int x = 0; x < grid.GetLength(0); x++)
 		{
 			for (int y = 0; y < grid.GetLength(1); y++)

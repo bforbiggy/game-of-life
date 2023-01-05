@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,6 +37,24 @@ public class Program
 	public static void CellChanged(object? sender, EventArgs e)
 	{
 		CellChangArgs args = (CellChangArgs)e;
+		if (args.state)
+		{
+			gd.DrawPixel(args.x, args.y, GameDisplay.WHITE);
+		}
+		else
+		{
+			gd.ErasePixel(args.x, args.y);
+		}
+	}
+
+	public static async void loop()
+	{
+		while (true)
+		{
+			await Task.Delay(500);
+			board.StepNext();
+		}
+
 	}
 
 	[STAThread]
@@ -56,8 +76,10 @@ public class Program
 		app.Startup += (a, b) =>
 		{
 			board.Load(@"board.save");
-			board.StepNext();
 			gd.Update(board);
+
+			// Infinitely update board
+			loop();
 		};
 		app.Run();
 	}
