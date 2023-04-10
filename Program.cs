@@ -36,15 +36,12 @@ public class Program
 
 	public static void CellChanged(object? sender, EventArgs e)
 	{
+		Trace.WriteLine("*");
 		CellChangArgs args = (CellChangArgs)e;
 		if (args.state)
-		{
 			gd.DrawPixel(args.x, args.y, GameDisplay.WHITE);
-		}
 		else
-		{
 			gd.ErasePixel(args.x, args.y);
-		}
 	}
 
 	public static async void loop()
